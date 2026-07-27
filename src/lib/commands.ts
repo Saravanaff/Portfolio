@@ -1,0 +1,231 @@
+export interface CommandOutput {
+  text: string;
+  color?: string;
+}
+
+export const BANNER = `
+ ██████╗ ███████╗████████╗██████╗  ██████╗       ████████╗███████╗██████╗ ███╗   ███╗
+██╔════╝ ██╔════╝╚══██╔══╝██╔══██╗██╔═══██╗      ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║
+██║  ███╗█████╗     ██║   ██████╔╝██║   ██║         ██║   █████╗  ██████╔╝██╔████╔██║
+██║   ██║██╔══╝     ██║   ██╔══██╗██║   ██║         ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║
+╚██████╔╝███████╗   ██║   ██║  ██║╚██████╔╝         ██║   ███████╗██║  ██║██║ ╚═╝ ██║
+ ╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝          ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝
+`;
+
+export const HELP_TEXT: CommandOutput[] = [
+  { text: "Available commands:", color: "text-green-400" },
+  { text: "" },
+  { text: "  about        - Learn about me", color: "text-white" },
+  { text: "  education    - My educational background", color: "text-white" },
+  { text: "  experience   - Work experience & internships", color: "text-white" },
+  { text: "  projects     - Featured projects", color: "text-white" },
+  { text: "  skills       - Technical skills & proficiencies", color: "text-white" },
+  { text: "  achievements - Competitive programming & achievements", color: "text-white" },
+  { text: "  contact      - How to reach me", color: "text-white" },
+  { text: "  resume       - Download/view my resume", color: "text-white" },
+  { text: "  help         - Show this help message", color: "text-white" },
+  { text: "  clear        - Clear the terminal", color: "text-white" },
+  { text: "  banner       - Show the ASCII banner", color: "text-white" },
+  { text: "" },
+  { text: "  Tip: Use ↑/↓ arrows to navigate command history, Tab for autocomplete", color: "text-zinc-500" },
+];
+
+export const ABOUT_TEXT: CommandOutput[] = [
+  { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-green-400" },
+  { text: "│                         WHO AM I?                                   │", color: "text-green-400" },
+  { text: "└─────────────────────────────────────────────────────────────────────┘", color: "text-green-400" },
+  { text: "" },
+  { text: "  Hey there! I'm Saravana Prabhu J", color: "text-cyan-400" },
+  { text: "" },
+  { text: "  A passionate Full-Stack Developer & Competitive Programmer", color: "text-white" },
+  { text: "  currently pursuing B.E. in Electrical and Electronics Engineering", color: "text-white" },
+  { text: "  at Chennai Institute of Technology (2023 – 2027).", color: "text-white" },
+  { text: "" },
+  { text: "  I love building scalable web applications and solving complex", color: "text-white" },
+  { text: "  problems. With experience spanning from crafting responsive", color: "text-white" },
+  { text: "  websites to architecting microservices backends, I bring ideas", color: "text-white" },
+  { text: "  to life through clean, efficient code.", color: "text-white" },
+  { text: "" },
+  { text: "  When I'm not coding, you'll find me grinding problems on", color: "text-white" },
+  { text: "  LeetCode (900+ problems, Top 3.5%) or participating in", color: "text-white" },
+  { text: "  competitive programming contests.", color: "text-white" },
+  { text: "" },
+  { text: "  Location: Tirupur, Tamil Nadu, India", color: "text-zinc-400" },
+];
+
+export const EDUCATION_TEXT: CommandOutput[] = [
+  { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-green-400" },
+  { text: "│                      EDUCATION                                     │", color: "text-green-400" },
+  { text: "└─────────────────────────────────────────────────────────────────────┘", color: "text-green-400" },
+  { text: "" },
+  { text: "  🎓 Chennai Institute of Technology", color: "text-cyan-400" },
+  { text: "     Bachelor of Electrical and Electronics Engineering", color: "text-white" },
+  { text: "     Duration: 2023 – 2027", color: "text-yellow-400" },
+  { text: "     CGPA: 8.3 / 10", color: "text-green-400" },
+  { text: "" },
+  { text: "  Currently in my pre-final year, balancing academics with", color: "text-zinc-400" },
+  { text: "  hands-on project work and competitive programming.", color: "text-zinc-400" },
+];
+
+export const EXPERIENCE_TEXT: CommandOutput[] = [
+  { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-green-400" },
+  { text: "│                    WORK EXPERIENCE                                  │", color: "text-green-400" },
+  { text: "└─────────────────────────────────────────────────────────────────────┘", color: "text-green-400" },
+  { text: "" },
+  { text: "  ▸ Internzo (Nov 2024 – Dec 2024)", color: "text-cyan-400" },
+  { text: "    ─────────────────────────────────────────────────────────────", color: "text-zinc-600" },
+  { text: "    • Assembled a fully responsive website with React, enhancing", color: "text-white" },
+  { text: "      user engagement by ~40% across platforms", color: "text-white" },
+  { text: "    • Integrated APIs and structured state workflows, boosting", color: "text-white" },
+  { text: "      system consistency across 10+ core features", color: "text-white" },
+  { text: "    • Diagnosed bottlenecks and applied optimizations, reducing", color: "text-white" },
+  { text: "      overall load time by ~35%", color: "text-white" },
+  { text: "" },
+  { text: "  ▸ SSV-Traders (May 2024 – June 2024)", color: "text-cyan-400" },
+  { text: "    ─────────────────────────────────────────────────────────────", color: "text-zinc-600" },
+  { text: "    • Designed and launched a responsive website that improved", color: "text-white" },
+  { text: "      page performance by ~30% across devices", color: "text-white" },
+  { text: "    • Refined UI components, improving navigation efficiency", color: "text-white" },
+  { text: "      by ~25% through layout optimization", color: "text-white" },
+  { text: "    • Oversaw deployment and maintenance operations, ensuring", color: "text-white" },
+  { text: "      99% uptime and stable performance", color: "text-white" },
+];
+
+export const PROJECTS_TEXT: CommandOutput[] = [
+  { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-green-400" },
+  { text: "│                      PROJECTS                                      │", color: "text-green-400" },
+  { text: "└─────────────────────────────────────────────────────────────────────┘", color: "text-green-400" },
+  { text: "" },
+  { text: "  1. Messenger", color: "text-cyan-400" },
+  { text: "     Tech: Node.js, gRPC, Redis, MySQL, Sequelize, PubSub", color: "text-yellow-400" },
+  { text: "     Date: June 2025", color: "text-zinc-400" },
+  { text: "     ─────────────────────────────────────────────────────────────", color: "text-zinc-600" },
+  { text: "     • Built fault-tolerant Redis Streams achieving 0% message", color: "text-white" },
+  { text: "       loss using ACK-based processing and retries", color: "text-white" },
+  { text: "     • Structured role-secured rooms and threads, enabling", color: "text-white" },
+  { text: "       organized collaboration for 500+ active users daily", color: "text-white" },
+  { text: "     • Introduced microservices-based backend architecture for", color: "text-white" },
+  { text: "       independent service deployment and scalability", color: "text-white" },
+  { text: "" },
+  { text: "  2. AI-Proctor", color: "text-cyan-400" },
+  { text: "     Tech: Next.js, Node.js, MySQL, MediaPipe, WASM", color: "text-yellow-400" },
+  { text: "     Date: July 2025 – Nov 2025", color: "text-zinc-400" },
+  { text: "     ─────────────────────────────────────────────────────────────", color: "text-zinc-600" },
+  { text: "     • AI-driven proctoring module detecting 10+ events in", color: "text-white" },
+  { text: "       real time reliably", color: "text-white" },
+  { text: "     • WebAssembly for 2× faster on-device inference and", color: "text-white" },
+  { text: "       reduced backend load", color: "text-white" },
+  { text: "     • Hierarchical RBAC system with 2 admin tiers to streamline", color: "text-white" },
+  { text: "       monitoring workflows", color: "text-white" },
+  { text: "" },
+  { text: "  3. Optimus", color: "text-cyan-400" },
+  { text: "     Tech: Next.js, Hono, Neon DB, Drizzle, RAG", color: "text-yellow-400" },
+  { text: "     Date: Feb 2026 – March 2026", color: "text-zinc-400" },
+  { text: "     ─────────────────────────────────────────────────────────────", color: "text-zinc-600" },
+  { text: "     • Roadmap-driven platform for structured skill progression", color: "text-white" },
+  { text: "       and peer-to-peer collaboration", color: "text-white" },
+  { text: "     • Hono framework for runtime-agnostic APIs compatible with", color: "text-white" },
+  { text: "       Node.js and edge-based deployments", color: "text-white" },
+  { text: "     • RAG-driven feature for contextual explanations using", color: "text-white" },
+  { text: "       semantic search", color: "text-white" },
+];
+
+export const SKILLS_TEXT: CommandOutput[] = [
+  { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-green-400" },
+  { text: "│                   TECHNICAL SKILLS                                 │", color: "text-green-400" },
+  { text: "└─────────────────────────────────────────────────────────────────────┘", color: "text-green-400" },
+  { text: "" },
+  { text: "  Languages", color: "text-cyan-400" },
+  { text: "  ─────────", color: "text-zinc-600" },
+  { text: "  Python    ████████████████████░░░░░  Advanced", color: "text-green-400" },
+  { text: "  C         ███████████████░░░░░░░░░░░  Proficient", color: "text-green-400" },
+  { text: "  C++       ████████████████░░░░░░░░░░  Proficient", color: "text-green-400" },
+  { text: "  JavaScript██████████████████████████░  Expert", color: "text-green-400" },
+  { text: "  TypeScript████████████████████████░░░  Advanced", color: "text-green-400" },
+  { text: "" },
+  { text: "  Frameworks & Technologies", color: "text-cyan-400" },
+  { text: "  ─────────────────────────", color: "text-zinc-600" },
+  { text: "  React, Next.js, Node.js, Express.js", color: "text-white" },
+  { text: "  GraphQL, Socket.io, WebRTC, LangChain", color: "text-white" },
+  { text: "" },
+  { text: "  Databases & Tools", color: "text-cyan-400" },
+  { text: "  ─────────────────", color: "text-zinc-600" },
+  { text: "  MySQL, MariaDB, PostgreSQL", color: "text-white" },
+  { text: "  Sequelize, Docker, Linux, GitHub, Postman", color: "text-white" },
+];
+
+export const ACHIEVEMENTS_TEXT: CommandOutput[] = [
+  { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-green-400" },
+  { text: "│                 ACHIEVEMENTS & COMPETITIVE PROGRAMMING             │", color: "text-green-400" },
+  { text: "└─────────────────────────────────────────────────────────────────────┘", color: "text-green-400" },
+  { text: "" },
+  { text: "  🏆 Competitive Programming", color: "text-cyan-400" },
+  { text: "  ──────────────────────────", color: "text-zinc-600" },
+  { text: "" },
+  { text: "  LeetCode", color: "text-yellow-400" },
+  { text: "    Problems Solved : 900+", color: "text-white" },
+  { text: "    Rank            : Top 3.5%", color: "text-green-400" },
+  { text: "    Rating          : 1952", color: "text-white" },
+  { text: "" },
+  { text: "  CodeChef", color: "text-yellow-400" },
+  { text: "    Rating          : 1674", color: "text-white" },
+  { text: "    Position        : 3 Star", color: "text-green-400" },
+  { text: "    Highest Rank    : 768 in contest", color: "text-white" },
+  { text: "" },
+  { text: "  Codeforces", color: "text-yellow-400" },
+  { text: "    Rating          : 1234", color: "text-white" },
+  { text: "    Position        : Pupil", color: "text-green-400" },
+  { text: "    Highest Rank    : 2238", color: "text-white" },
+  { text: "" },
+  { text: "  🎖️ Other Achievements", color: "text-cyan-400" },
+  { text: "  ──────────────────────", color: "text-zinc-600" },
+  { text: "  • Orchestrated full-stack bootcamp through GDG club", color: "text-white" },
+  { text: "  • Finalist at SVCE Hackathon", color: "text-white" },
+  { text: "  • Facilitated web development sessions for freshers", color: "text-white" },
+  { text: "  • Won 3rd position at Threx Hackathon", color: "text-white" },
+];
+
+export const CONTACT_TEXT: CommandOutput[] = [
+  { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-green-400" },
+  { text: "│                       CONTACT ME                                   │", color: "text-green-400" },
+  { text: "└─────────────────────────────────────────────────────────────────────┘", color: "text-green-400" },
+  { text: "" },
+  { text: "  📧 Email    : saravanaprabhuj.eee2023@citchennai.net", color: "text-white" },
+  { text: "  📱 Phone    : +91 8248144339", color: "text-white" },
+  { text: "  💼 LinkedIn : linkedin.com/in/saravanaprabhuj", color: "text-white" },
+  { text: "  🐙 GitHub   : github.com/saravanaprabhuj", color: "text-white" },
+  { text: "  📍 Location : Tirupur, Tamil Nadu, India", color: "text-white" },
+  { text: "" },
+  { text: "  Feel free to reach out! I'm always open to discussing", color: "text-zinc-400" },
+  { text: "  new projects, creative ideas, or opportunities.", color: "text-zinc-400" },
+];
+
+export const RESUME_TEXT: CommandOutput[] = [
+  { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-green-400" },
+  { text: "│                        RESUME                                      │", color: "text-green-400" },
+  { text: "└─────────────────────────────────────────────────────────────────────┘", color: "text-green-400" },
+  { text: "" },
+  { text: "  You're looking at it! This terminal IS my resume.", color: "text-cyan-400" },
+  { text: "" },
+  { text: "  Type 'about', 'education', 'experience', 'projects',", color: "text-white" },
+  { text: "  'skills', 'achievements', or 'contact' to explore", color: "text-white" },
+  { text: "  different sections.", color: "text-white" },
+  { text: "" },
+  { text: "  Or type 'help' to see all available commands.", color: "text-zinc-400" },
+];
+
+export const COMMANDS: Record<string, () => CommandOutput[]> = {
+  help: () => HELP_TEXT,
+  about: () => ABOUT_TEXT,
+  education: () => EDUCATION_TEXT,
+  experience: () => EXPERIENCE_TEXT,
+  projects: () => PROJECTS_TEXT,
+  skills: () => SKILLS_TEXT,
+  achievements: () => ACHIEVEMENTS_TEXT,
+  contact: () => CONTACT_TEXT,
+  resume: () => RESUME_TEXT,
+  banner: () => [{ text: BANNER, color: "text-green-400" }],
+  clear: () => [],
+};
+
+export const AVAILABLE_COMMANDS = Object.keys(COMMANDS);
