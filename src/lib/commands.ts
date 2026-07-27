@@ -15,6 +15,11 @@ export const BANNER = `
 export const HELP_TEXT: CommandOutput[] = [
   { text: "Available commands:", color: "text-kitty-green" },
   { text: "" },
+  { text: "  ls           - List directory contents", color: "text-kitty-fg" },
+  { text: "  pwd          - Print working directory", color: "text-kitty-fg" },
+  { text: "  whoami       - Display current user", color: "text-kitty-fg" },
+  { text: "  date         - Show current date and time", color: "text-kitty-fg" },
+  { text: "  neofetch     - System info with ASCII art", color: "text-kitty-fg" },
   { text: "  about        - Learn about me", color: "text-kitty-fg" },
   { text: "  education    - My educational background", color: "text-kitty-fg" },
   { text: "  experience   - Work experience & internships", color: "text-kitty-fg" },
@@ -214,6 +219,46 @@ export const RESUME_TEXT: CommandOutput[] = [
   { text: "  Or type 'help' to see all available commands.", color: "text-kitty-gray" },
 ];
 
+export const LS_TEXT: CommandOutput[] = [
+  { text: "Desktop    Documents  Downloads  Music       Pictures    Videos", color: "text-kitty-blue" },
+  { text: ".bashrc    .config    .local     .vimrc      .zshrc      .ssh", color: "text-kitty-fg" },
+];
+
+export const PWD_TEXT: CommandOutput[] = [
+  { text: "/home/saravana", color: "text-kitty-fg" },
+];
+
+export const WHOAMI_TEXT: CommandOutput[] = [
+  { text: "saravana", color: "text-kitty-fg" },
+];
+
+export const DATE_TEXT: CommandOutput[] = [
+  { text: new Date().toString(), color: "text-kitty-fg" },
+];
+
+export const NEOFETCH_TEXT: CommandOutput[] = [
+  { text: "            .-/+oossssoo+/-.               saravana@portfolio", color: "text-kitty-green" },
+  { text: "        `:+ssssssssssssssssss+:`           ──────────────────", color: "text-kitty-green" },
+  { text: "      -+ssssssssssssssssssyyssss+-         OS: Arch Linux x86_64", color: "text-kitty-fg" },
+  { text: "    .ossssssssssssssssssdMMMNysssso.       Host: Saravana Prabhu", color: "text-kitty-fg" },
+  { text: "   /ssssssssssshdmmNNmmyNMMMMhssssss/      Kernel: 6.9.7-arch1-1", color: "text-kitty-fg" },
+  { text: "  +ssssssssshmydMMMMMMMNddddyssssssss+     Shell: zsh 5.9", color: "text-kitty-fg" },
+  { text: " /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/    Terminal: kitty", color: "text-kitty-fg" },
+  { text: ".ssssssssdMMMNhsssssssssshNMMMdssssssss.   CPU: Web Browser", color: "text-kitty-fg" },
+  { text: "+sssshhhyNMMNyssssssssssssyNMMMysssssss+   Memory: 900+ LeetCode problems", color: "text-kitty-fg" },
+  { text: "ossyNMMMNyMMhsssssssssssssshmmmhssssssso   Rating: Top 3.5% LeetCode", color: "text-kitty-yellow" },
+  { text: "ossyNMMMNyMMhsssssssssssssshmmmhssssssso   Languages: Python, C, C++, JS, TS", color: "text-kitty-yellow" },
+  { text: "+sssshhhyNMMNyssssssssssssyNMMMysssssss+   Frameworks: React, Next.js, Node.js", color: "text-kitty-fg" },
+  { text: ".ssssssssdMMMNhsssssssssshNMMMdssssssss.   Databases: MySQL, PostgreSQL", color: "text-kitty-fg" },
+  { text: " /sssssssshNMMMyhhyyyyhdNMMMNhssssssss/    Uptime: since 2023", color: "text-kitty-fg" },
+  { text: "  +sssssssssdmydMMMMMMMMddddyssssssss+     ", color: "text-kitty-fg" },
+  { text: "   /ssssssssssshdmNNNNmyNMMMMhssssss/      ┌─────┬─────┬─────┬─────┬─────┐", color: "text-kitty-fg" },
+  { text: "    .ossssssssssssssssssdMMMNysssso.       │  ●  │  ●  │  ●  │  ●  │  ●  │", color: "text-kitty-red" },
+  { text: "      -+sssssssssssssssssyyyssss+-         └─────┴─────┴─────┴─────┴─────┘", color: "text-kitty-red" },
+  { text: "        `:+ssssssssssssssssss+:`           red  green yellow blue magenta", color: "text-kitty-fg" },
+  { text: "            .-/+oossssoo+/-.               ", color: "text-kitty-fg" },
+];
+
 export const COMMANDS: Record<string, () => CommandOutput[]> = {
   help: () => HELP_TEXT,
   about: () => ABOUT_TEXT,
@@ -225,6 +270,11 @@ export const COMMANDS: Record<string, () => CommandOutput[]> = {
   contact: () => CONTACT_TEXT,
   resume: () => RESUME_TEXT,
   banner: () => [{ text: BANNER, color: "text-kitty-blue" }],
+  ls: () => LS_TEXT,
+  pwd: () => PWD_TEXT,
+  whoami: () => WHOAMI_TEXT,
+  date: () => DATE_TEXT,
+  neofetch: () => NEOFETCH_TEXT,
   clear: () => [],
 };
 
