@@ -13,14 +13,12 @@ interface TerminalLine {
   type: "input" | "output" | "banner" | "boot";
   content: string | CommandOutput[];
   color?: string;
-  command?: string;
 }
 
 const BOOT_SEQUENCE = [
-  { text: "Initializing system...", delay: 100 },
-  { text: "Loading portfolio modules... done", delay: 200 },
-  { text: "Connecting to saravanaprabhuj.dev... done", delay: 150 },
-  { text: "Type 'help' to see available commands.", delay: 50 },
+  { text: "Last login: Sat Jul 26 09:41:23 2025 from tty1", delay: 50 },
+  { text: "", delay: 10 },
+  { text: "Welcome to Arch Linux (kitty 0.36.1). Type 'help' for commands.", delay: 40 },
 ];
 
 export default function Terminal() {
@@ -46,74 +44,51 @@ export default function Terminal() {
     }
   }, []);
 
-  // Boot sequence
   useEffect(() => {
     if (!isBooting) return;
-
     let timeoutId: ReturnType<typeof setTimeout>;
     const runBoot = async () => {
       const bannerLine: TerminalLine = {
         id: getNextId(),
         type: "banner",
         content: BANNER,
-        color: "text-green-400",
+        color: "text-kitty-blue",
       };
       setLines([bannerLine]);
       scrollToBottom();
-
       for (const step of BOOT_SEQUENCE) {
-        await new Promise((r) => {
-          timeoutId = setTimeout(r, step.delay);
-        });
+        await new Promise((r) => { timeoutId = setTimeout(r, step.delay); });
         setLines((prev) => [
           ...prev,
-          { id: getNextId(), type: "boot", content: step.text, color: "text-zinc-400" },
+          { id: getNextId(), type: "boot", content: step.text, color: "text-kitty-gray" },
         ]);
         scrollToBottom();
       }
-
-      await new Promise((r) => {
-        timeoutId = setTimeout(r, 300);
-      });
+      await new Promise((r) => { timeoutId = setTimeout(r, 150); });
       setIsBooting(false);
       setBootComplete(true);
     };
-
     runBoot();
-
     return () => clearTimeout(timeoutId);
   }, [isBooting, getNextId, scrollToBottom]);
 
-  // Focus input on click
   useEffect(() => {
-    const handleClick = () => {
-      inputRef.current?.focus();
-    };
+    const handleClick = () => inputRef.current?.focus();
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  // Scroll on new lines
-  useEffect(() => {
-    scrollToBottom();
-  }, [lines, scrollToBottom]);
+  useEffect(() => { scrollToBottom(); }, [lines, scrollToBottom]);
 
-  // Tab autocomplete
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Tab") {
         e.preventDefault();
         const trimmed = input.trim().toLowerCase();
         if (trimmed) {
-          const matches = AVAILABLE_COMMANDS.filter((cmd) =>
-            cmd.startsWith(trimmed)
-          );
-          if (matches.length === 1) {
-            setInput(matches[0]);
-            setSuggestions([]);
-          } else if (matches.length > 1) {
-            setSuggestions(matches);
-          }
+          const matches = AVAILABLE_COMMANDS.filter((cmd) => cmd.startsWith(trimmed));
+          if (matches.length === 1) { setInput(matches[0]); setSuggestions([]); }
+          else if (matches.length > 1) { setSuggestions(matches); }
         }
       }
     };
@@ -121,124 +96,62 @@ export default function Terminal() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [input]);
 
-  const executeCommand = useCallback(
-    (cmd: string) => {
-      const trimmed = cmd.trim().toLowerCase();
+  const executeCommand = useCallback((cmd: string) => {
+    const trimmed = cmd.trim().toLowerCase();
+    const inputLine: TerminalLine = { id: getNextId(), type: "input", content: cmd };
+    if (!trimmed) { setLines((prev) => [...prev, inputLine]); return; }
+    if (trimmed === "clear") { setLines([]); return; }
+    const handler = COMMANDS[trimmed];
+    const outputLines: TerminalLine[] = handler
+      ? [{ id: getNextId(), type: "output" as const, content: handler() }]
+      : [{ id: getNextId(), type: "output" as const, content: [
+        { text: `kitty: command not found: ${trimmed}`, color: "text-kitty-red" },
+        { text: `Type 'help' for available commands.`, color: "text-kitty-gray" },
+      ]}];
+    setLines((prev) => [...prev, inputLine, ...outputLines]);
+    setCommandHistory((prev) => { const h = [...prev, trimmed]; return h.length > 50 ? h.slice(-50) : h; });
+    setHistoryIndex(-1);
+  }, [getNextId]);
 
-      // Add input line
-      const inputLine: TerminalLine = {
-        id: getNextId(),
-        type: "input",
-        content: cmd,
-        command: cmd,
-      };
-
-      if (!trimmed) {
-        setLines((prev) => [...prev, inputLine]);
-        return;
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") { executeCommand(input); setInput(""); setSuggestions([]); }
+    else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (commandHistory.length > 0) {
+        const i = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
+        setHistoryIndex(i); setInput(commandHistory[i]);
       }
-
-      // Handle clear separately
-      if (trimmed === "clear") {
-        setLines([]);
-        return;
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (historyIndex !== -1) {
+        const i = historyIndex + 1;
+        if (i >= commandHistory.length) { setHistoryIndex(-1); setInput(""); }
+        else { setHistoryIndex(i); setInput(commandHistory[i]); }
       }
-
-      // Find command
-      const handler = COMMANDS[trimmed];
-      const outputLines: TerminalLine[] = handler
-        ? [{ id: getNextId(), type: "output" as const, content: handler() }]
-        : [
-            {
-              id: getNextId(),
-              type: "output" as const,
-              content: [
-                {
-                  text: `Command not found: ${trimmed}. Type 'help' for available commands.`,
-                  color: "text-red-400",
-                },
-              ],
-            },
-          ];
-
-      setLines((prev) => [...prev, inputLine, ...outputLines]);
-
-      // Update history
-      setCommandHistory((prev) => {
-        const newHistory = [...prev, trimmed];
-        return newHistory.length > 50 ? newHistory.slice(-50) : newHistory;
-      });
-      setHistoryIndex(-1);
-    },
-    [getNextId]
-  );
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
-        executeCommand(input);
-        setInput("");
-        setSuggestions([]);
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        if (commandHistory.length > 0) {
-          const newIndex =
-            historyIndex === -1
-              ? commandHistory.length - 1
-              : Math.max(0, historyIndex - 1);
-          setHistoryIndex(newIndex);
-          setInput(commandHistory[newIndex]);
-        }
-      } else if (e.key === "ArrowDown") {
-        e.preventDefault();
-        if (historyIndex !== -1) {
-          const newIndex = historyIndex + 1;
-          if (newIndex >= commandHistory.length) {
-            setHistoryIndex(-1);
-            setInput("");
-          } else {
-            setHistoryIndex(newIndex);
-            setInput(commandHistory[newIndex]);
-          }
-        }
-      } else if (e.key === "l" && e.ctrlKey) {
-        e.preventDefault();
-        setLines([]);
-      }
-    },
-    [input, commandHistory, historyIndex, executeCommand]
-  );
+    } else if (e.key === "l" && e.ctrlKey) { e.preventDefault(); setLines([]); }
+  }, [input, commandHistory, historyIndex, executeCommand]);
 
   const renderOutput = (line: TerminalLine) => {
     if (line.type === "banner" || line.type === "boot") {
       return (
-        <pre
-          key={line.id}
-          className={`whitespace-pre font-mono text-xs sm:text-sm leading-tight ${line.color || "text-white"}`}
-        >
+        <pre key={line.id} className={`whitespace-pre font-mono text-[14px] leading-tight ${line.color || "text-kitty-fg"}`}>
           {line.content as string}
         </pre>
       );
     }
-
     if (line.type === "input") {
       return (
-        <div key={line.id} className="flex items-start gap-2">
-          <span className="text-green-400 shrink-0">❯</span>
-          <span className="text-white">{line.content as string}</span>
+        <div key={line.id} className="flex items-start">
+          <span className="text-kitty-yellow shrink-0">❯ </span>
+          <span className="text-kitty-fg">{line.content as string}</span>
         </div>
       );
     }
-
-    // Output
     const output = line.content as CommandOutput[];
     return (
-      <div key={line.id} className="flex flex-col gap-0">
+      <div key={line.id} className="flex flex-col">
         {output.map((o, i) => (
-          <pre
-            key={`${line.id}-${i}`}
-            className={`whitespace-pre font-mono text-sm leading-relaxed ${o.color || "text-white"}`}
-          >
+          <pre key={`${line.id}-${i}`} className={`whitespace-pre font-mono text-[14px] leading-[1.6] ${o.color || "text-kitty-fg"}`}>
             {o.text}
           </pre>
         ))}
@@ -247,52 +160,41 @@ export default function Terminal() {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-[#0D1117] overflow-hidden">
+    <div className="flex flex-col w-full h-screen bg-kitty-bg overflow-hidden select-none font-mono">
       {/* Title bar */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-[#161B22] border-b border-[#30363D] shrink-0">
-        <div className="flex gap-2">
-          <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
-          <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-          <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+      <div className="flex items-center justify-between px-4 h-7 bg-kitty-titlebar border-b border-kitty-border shrink-0">
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-kitty-red/70" />
+          <div className="w-2.5 h-2.5 rounded-full bg-kitty-yellow/70" />
+          <div className="w-2.5 h-2.5 rounded-full bg-kitty-green/70" />
         </div>
-        <span className="text-[#8B949E] text-sm font-mono ml-2">
-          saravana@portfolio:~
-        </span>
+        <span className="text-kitty-gray text-[12px]">saravana — kitty</span>
+        <div className="w-10" />
       </div>
 
       {/* Terminal body */}
-      <div
-        ref={terminalRef}
-        className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 font-mono text-sm scroll-smooth"
-      >
+      <div ref={terminalRef} className="flex-1 overflow-y-auto px-5 py-3 scroll-smooth">
         {lines.map(renderOutput)}
 
-        {/* Suggestions */}
         {suggestions.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-1 mb-1">
             {suggestions.map((s) => (
-              <span key={s} className="text-yellow-400 bg-[#1C2333] px-2 py-0.5 rounded">
-                {s}
-              </span>
+              <span key={s} className="text-kitty-yellow bg-kitty-surface px-2 py-0.5 rounded text-[13px]">{s}</span>
             ))}
           </div>
         )}
 
-        {/* Input line */}
         {bootComplete && (
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-green-400 shrink-0">❯</span>
+          <div className="flex items-center mt-1">
+            <span className="text-kitty-yellow shrink-0">❯ </span>
             <div className="relative flex-1">
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
-                onChange={(e) => {
-                  setInput(e.target.value);
-                  setSuggestions([]);
-                }}
+                onChange={(e) => { setInput(e.target.value); setSuggestions([]); }}
                 onKeyDown={handleKeyDown}
-                className="w-full bg-transparent text-white outline-none caret-green-400 font-mono text-sm"
+                className="w-full bg-transparent text-kitty-fg outline-none caret-kitty-cursor font-mono text-[14px]"
                 autoFocus
                 autoComplete="off"
                 autoCorrect="off"
@@ -303,14 +205,7 @@ export default function Terminal() {
           </div>
         )}
 
-        {/* Invisible spacer to keep input visible */}
         <div className="h-4" />
-      </div>
-
-      {/* Status bar */}
-      <div className="flex items-center justify-between px-4 py-1 bg-[#161B22] border-t border-[#30363D] text-xs text-[#8B949E] font-mono shrink-0">
-        <span>Saravana Prabhu J</span>
-        <span>Full-Stack Developer | Competitive Programmer</span>
       </div>
     </div>
   );
