@@ -101,6 +101,30 @@ export default function Terminal() {
     const inputLine: TerminalLine = { id: getNextId(), type: "input", content: cmd };
     if (!trimmed) { setLines((prev) => [...prev, inputLine]); return; }
     if (trimmed === "clear") { setLines([]); return; }
+
+    if (trimmed === "resume") {
+      fetch("/Saravana_Prabhu.pdf")
+        .then((res) => res.blob())
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "Saravana_Prabhu.pdf";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        });
+      const outputLines: TerminalLine[] = [{ id: getNextId(), type: "output" as const, content: [
+        { text: "Downloading resume...", color: "text-kitty-green" },
+        { text: "File: Saravana_Prabhu.pdf", color: "text-kitty-gray" },
+      ]}];
+      setLines((prev) => [...prev, inputLine, ...outputLines]);
+      setCommandHistory((prev) => { const h = [...prev, trimmed]; return h.length > 50 ? h.slice(-50) : h; });
+      setHistoryIndex(-1);
+      return;
+    }
+
     const handler = COMMANDS[trimmed];
     const outputLines: TerminalLine[] = handler
       ? [{ id: getNextId(), type: "output" as const, content: handler() }]
