@@ -6,7 +6,7 @@ export interface CommandOutput {
 export const BANNER = `
 =====================================
   SARAVANA PRABHU J
-  Full-Stack Developer
+  Software Developer
   Competitive Programmer
 =====================================
 `;
@@ -41,7 +41,7 @@ export const ABOUT_TEXT: CommandOutput[] = [
   { text: "" },
   { text: "  Hey there! I'm Saravana Prabhu J", color: "text-kitty-cyan" },
   { text: "" },
-  { text: "  A passionate Full-Stack Developer & Competitive Programmer", color: "text-kitty-fg" },
+  { text: "  A passionate Software Developer & Competitive Programmer", color: "text-kitty-fg" },
   { text: "  currently pursuing B.E. in Electrical and Electronics Engineering", color: "text-kitty-fg" },
   { text: "  at Chennai Institute of Technology (2023 – 2027).", color: "text-kitty-fg" },
   { text: "" },
