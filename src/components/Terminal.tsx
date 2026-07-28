@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, type ReactNode } from "react";
 import {
-  BANNER,
   COMMANDS,
   AVAILABLE_COMMANDS,
   type CommandOutput,
 } from "@/lib/commands";
+import Banner from "./Banner";
 
 interface TerminalLine {
   id: number;
   type: "input" | "output" | "banner" | "boot";
-  content: string | CommandOutput[];
+  content: string | CommandOutput[] | ReactNode;
   color?: string;
 }
 
@@ -51,8 +51,7 @@ export default function Terminal() {
       const bannerLine: TerminalLine = {
         id: getNextId(),
         type: "banner",
-        content: BANNER,
-        color: "text-kitty-blue",
+        content: <Banner />,
       };
       setLines([bannerLine]);
       scrollToBottom();
@@ -156,7 +155,14 @@ export default function Terminal() {
   }, [input, commandHistory, historyIndex, executeCommand]);
 
   const renderOutput = (line: TerminalLine) => {
-    if (line.type === "banner" || line.type === "boot") {
+    if (line.type === "banner") {
+      return (
+        <div key={line.id}>
+          {line.content as ReactNode}
+        </div>
+      );
+    }
+    if (line.type === "boot") {
       return (
         <pre key={line.id} className={`whitespace-pre font-mono text-[14px] leading-tight ${line.color || "text-kitty-fg"}`}>
           {line.content as string}
@@ -176,11 +182,33 @@ export default function Terminal() {
       <div key={line.id} className="flex flex-col">
         {output.map((o, i) => (
           <pre key={`${line.id}-${i}`} className={`whitespace-pre font-mono text-[14px] leading-[1.6] ${o.color || "text-kitty-fg"}`}>
-            {o.text}
+            {renderTextWithLinks(o.text)}
           </pre>
         ))}
       </div>
     );
+  };
+
+  const renderTextWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+|linkedin\.com\/[^\s]+|github\.com\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+    return parts.map((part, i) => {
+      if (part.match(urlRegex)) {
+        const href = part.startsWith("http") ? part : `https://${part}`;
+        return (
+          <a
+            key={i}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-kitty-blue underline hover:text-kitty-cyan cursor-pointer"
+          >
+            {part}
+          </a>
+        );
+      }
+      return <span key={i}>{part}</span>;
+    });
   };
 
   return (
