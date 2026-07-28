@@ -26,6 +26,7 @@ export const HELP_TEXT: CommandOutput[] = [
   { text: "  skills       - Technical skills & proficiencies", color: "text-kitty-fg" },
   { text: "  achievements - Competitive programming & achievements", color: "text-kitty-fg" },
   { text: "  contact      - How to reach me", color: "text-kitty-fg" },
+  { text: "  mail         - Send me an email", color: "text-kitty-fg" },
   { text: "  resume       - Download/view my resume", color: "text-kitty-fg" },
   { text: "  help         - Show this help message", color: "text-kitty-fg" },
   { text: "  clear        - Clear the terminal", color: "text-kitty-fg" },
@@ -219,6 +220,14 @@ export const CONTACT_TEXT: CommandOutput[] = [
   { text: "  new projects, creative ideas, or opportunities.", color: "text-kitty-gray" },
 ];
 
+export const MAIL_TEXT: CommandOutput[] = [
+  { text: "Opening email client...", color: "text-kitty-green" },
+  { text: "To: saravanaprabhuj.eee2023@citchennai.net", color: "text-kitty-fg" },
+  { text: "", color: "text-kitty-fg" },
+  { text: "If the email client didn't open, you can reach me at:", color: "text-kitty-gray" },
+  { text: "  Email: saravanaprabhuj.eee2023@citchennai.net", color: "text-kitty-blue" },
+];
+
 export const RESUME_TEXT: CommandOutput[] = [
   { text: "┌─────────────────────────────────────────────────────────────────────┐", color: "text-kitty-blue" },
   { text: "│                        RESUME                                      │", color: "text-kitty-blue" },
@@ -281,6 +290,7 @@ export const COMMANDS: Record<string, () => CommandOutput[]> = {
   skills: () => SKILLS_TEXT,
   achievements: () => ACHIEVEMENTS_TEXT,
   contact: () => CONTACT_TEXT,
+  mail: () => MAIL_TEXT,
   resume: () => RESUME_TEXT,
   banner: () => [{ text: BANNER, color: "text-kitty-blue" }],
   ls: () => LS_TEXT,

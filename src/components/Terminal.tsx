@@ -124,6 +124,18 @@ export default function Terminal() {
       return;
     }
 
+    if (trimmed === "mail") {
+      window.open("mailto:saravanaprabhuj.eee2023@citchennai.net", "_blank");
+      const outputLines: TerminalLine[] = [{ id: getNextId(), type: "output" as const, content: [
+        { text: "Opening email client...", color: "text-kitty-green" },
+        { text: "To: saravanaprabhuj.eee2023@citchennai.net", color: "text-kitty-fg" },
+      ]}];
+      setLines((prev) => [...prev, inputLine, ...outputLines]);
+      setCommandHistory((prev) => { const h = [...prev, trimmed]; return h.length > 50 ? h.slice(-50) : h; });
+      setHistoryIndex(-1);
+      return;
+    }
+
     const handler = COMMANDS[trimmed];
     const outputLines: TerminalLine[] = handler
       ? [{ id: getNextId(), type: "output" as const, content: handler() }]
